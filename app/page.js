@@ -1,95 +1,70 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
+import React, {useEffect, useState} from 'react'
+import 'bootstrap/dist/css/bootstrap.css'
+import axios from "axios";
+import './page.css'
+
+const Drink = ({ thumbURL, title, instructions, ingredients }) => {
+  return(
+    <div className="drink-item d-flex rounded p-3 gap-3">
+      <div className='thumb-wrapper text-center-sm'><img className='rounded thumb' src={ thumbURL } alt="Drink thumb" /></div>
+      <div>
+        <h4 className="title mb-0">{ title }</h4>
+        <div className='d-flex flex-wrap gap-2 mt-2'>
+          <small className='fw-600'>Ingredients:</small>
+          {
+            ingredients.map((ingredient, index) => {
+              return(
+                <small key={ index } className='ingredients'>{ ingredient }</small>
+              )
+            })
+          }
+        </div>
+        <p className='mt-3'><span className='fw-600'>Instructions:</span> { instructions }</p>
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
+  const [drinks, setDrinks] = useState([]);
+  useEffect(() => {
+    axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=`)
+    .then(res => {
+        setDrinks(res.data.drinks ? res.data.drinks : [])
+    })
+  }, [])
+
+  function onSearchChanged(e){
+      axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${ e.target.value }`)
+      .then(res => {
+          setDrinks(res.data.drinks ? res.data.drinks : [])
+      })
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main>
+      <section className="search-bar py-5 text-center shadow-sm">
+        <div className="container">
+            <h1 className={`text-center main-title display-4`}>Cocktail <i class="fa-solid fa-martini-glass-citrus icon"></i> Info</h1>
+            <div><input id='search' onChange={ onSearchChanged } className={`form-control w-75 mx-auto neumorphism-pushed`} placeholder='Search cocktail name here' /></div>
         </div>
-      </div>
+      </section>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <section className="search-result">
+        <div className="container py-5 d-grid gap-4">
+            {
+                drinks.length ?
+                drinks.map((drink, index) => {
+                    var ingredients = []
+                    for(var i = 1; i <= 15; i++){
+                    if(drink[`strIngredient${ i }`]) ingredients.push(drink[`strIngredient${ i }`])
+                    }
+                    return( <Drink key={ index } ingredients={ ingredients } thumbURL={ drink.strDrinkThumb } title={ drink.strDrink } instructions={ drink.strInstructions } /> )
+                }) : <h4 className="text-center text-danger">No Drink Found</h4>
+            }
+        </div>
+      </section>
     </main>
-  )
+)
 }

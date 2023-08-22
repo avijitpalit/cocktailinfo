@@ -1,0 +1,35 @@
+:root{
+    --color-slate: #efefef;
+}
+body{ font-family: 'Poppins', sans-serif !important; background: #efefef !important; }
+.search-bar{ position: sticky; top: 0; background: #efefef99; backdrop-filter: blur(10px); }
+.drink-item .thumb{ width: 10rem; } 
+.drink-item .ingredients{ padding: 0 5px; border-radius: 3px; background: #0001; }
+.drink-item .title{ font-weight: 600; }
+.main-title{ font-family: 'Teko', sans-serif !important; }
+.main-title .icon{ font-size: 2.5rem; color: darkred; }
+#search{ padding: 1rem; border-radius: 100px !important; border-color: transparent !important; background: #efefef; box-shadow: -2px -2px 5px rgba(255, 255, 255, .7) inset, -2px -2px 3px rgba(255, 255, 255, .5) inset, 2px 2px 5px rgba(255, 255, 255, .075) inset, 2px 2px 3px rgba(0, 0, 0, .15) inset; }
+.drink-item{ background: #efefef; box-shadow: -2px -2px 5px rgba(255, 255, 255, .7),
+    -2px -2px 3px rgba(255, 255, 255, .5),
+    2px 2px 5px rgba(255, 255, 255, .075),
+    2px 2px 3px rgba(0, 0, 0, .15); }
+
+.neumorphism-pushed{
+    box-shadow: 2px 2px 5px rgba(255, 255, 255, .7),
+    2px 2px 3px rgba(255, 255, 255, .5),
+    -2px -2px 5px rgba(255, 255, 255, .075),
+    -2px -2px 3px rgba(0, 0, 0, .15);
+}
+.neumorphism-popped{
+    box-shadow: -2px -2px 5px rgba(255, 255, 255, .7),
+    -2px -2px 3px rgba(255, 255, 255, .5),
+    2px 2px 5px rgba(255, 255, 255, .075),
+    2px 2px 3px rgba(0, 0, 0, .15);
+}
+
+@media (max-width: 576px){
+    .flex-column-sm{ flex-flow: column !important; }
+    .text-center-sm{ text-align: center !important; }
+    .drink-item .thumb{ width: 4rem; }
+    .search-bar, .search-result .container{ padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+}
